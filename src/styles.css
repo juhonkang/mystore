@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.error-message{
+  @apply text-red-500 text-sm mt-1;
+}
