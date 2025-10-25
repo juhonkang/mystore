@@ -1,1 +1,17 @@
-<app-products-list [products]="products"  (productAdded)="handleProductAdded($event)" />
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <app-product-filter [allProducts]="allProducts"></app-product-filter>
+
+  <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+  </div>
+
+  <div *ngIf="!isLoading && filteredProducts.length === 0 && allProducts.length > 0" class="text-center py-12">
+    <p class="text-gray-500 text-lg">No products found matching your filters.</p>
+  </div>
+
+  <app-products-list
+    *ngIf="!isLoading"
+    [products]="filteredProducts"
+    (productAdded)="handleProductAdded($event)">
+  </app-products-list>
+</div>

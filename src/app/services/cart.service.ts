@@ -25,9 +25,36 @@ export interface Cart {
 })
 export class CartService {
 
+  private readonly CART_STORAGE_KEY = 'mystore_cart';
   private _cart: BehaviorSubject<Cart> = new BehaviorSubject({});
 
   constructor(private http: HttpClient, private productsService: ProductsService) {
+    this.loadCartFromStorage();
+  }
+
+  private loadCartFromStorage(): void {
+    try {
+      const savedCart = localStorage.getItem(this.CART_STORAGE_KEY);
+      if (savedCart) {
+        const cart = JSON.parse(savedCart);
+        this._cart.next(cart);
+      }
+    } catch (error) {
+      console.error('Error loading cart from storage:', error);
+    }
+  }
+
+  private saveCartToStorage(cart: Cart): void {
+    try {
+      localStorage.setItem(this.CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch (error) {
+      console.error('Error saving cart to storage:', error);
+    }
+  }
+
+  clearCart(): void {
+    this._cart.next({});
+    localStorage.removeItem(this.CART_STORAGE_KEY);
   }
 
   get cart(): Observable<Cart> {
@@ -54,11 +81,13 @@ export class CartService {
 
             // Update the cart
             this._cart.next(updatedCart);
+            this.saveCartToStorage(updatedCart);
         }
     }
 
   updateCart(cart: Cart): void {
     this._cart.next(cart);
+    this.saveCartToStorage(cart);
   }
 
   addToCart(product: Product): void {
@@ -81,6 +110,7 @@ export class CartService {
           total: this.calculateTotalPrice(updatedProducts as Product[]),
         };
       this._cart.next(updatedCart);
+      this.saveCartToStorage(updatedCart);
     } else {
       // Product does not exist, add new
       const updatedProducts = this._cart.value.products ? [...this._cart.value.products, product] : [product];
@@ -92,6 +122,7 @@ export class CartService {
       };
 
       this._cart.next(updatedCart);
+      this.saveCartToStorage(updatedCart);
     }
   }
 

@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CartService, Cart } from "../../services/cart.service";
+import { NotificationService } from "../../services/notification.service";
 import { Subscription } from "rxjs";
 
 @Component({
@@ -16,6 +17,7 @@ import { Subscription } from "rxjs";
 export class CheckoutComponent {
   cart: Cart;
   cartSubscription: Subscription | undefined;
+  isSubmitting: boolean = false;
 
   validationMessages = {
     cardNumber: [
@@ -108,7 +110,12 @@ export class CheckoutComponent {
     postalCode: new FormControl("", [Validators.required, Validators.minLength(5)])
   });
 
-  constructor(private http: HttpService, private _router: Router, private cartService: CartService) {
+  constructor(
+    private http: HttpService,
+    private _router: Router,
+    private cartService: CartService,
+    private notificationService: NotificationService
+  ) {
     this.cart = {};
   }
 
@@ -123,8 +130,22 @@ export class CheckoutComponent {
   };
 
   submitCheckout() {
+    if (this.checkoutData.invalid) {
+      this.notificationService.error('Please fill in all required fields correctly.');
+      this.markFormGroupTouched(this.checkoutData);
+      return;
+    }
+
+    if (!this.cart.products || this.cart.products.length === 0) {
+      this.notificationService.warning('Your cart is empty. Please add items before checking out.');
+      this._router.navigateByUrl('/');
+      return;
+    }
+
+    this.isSubmitting = true;
     console.log(this.checkoutData.status, "status");
     console.log(this.checkoutData.value);
+
     this.cart = {
       ...this.cart,
       checkout: {
@@ -138,9 +159,24 @@ export class CheckoutComponent {
         postalCode: this.checkoutData.value.postalCode!
       }
     };
+
     this.cartService.updateCart(this.cart);
-    this._router.navigateByUrl("/confirm");
+    this.notificationService.success('Order placed successfully!');
 
+    setTimeout(() => {
+      this.isSubmitting = false;
+      this._router.navigateByUrl("/confirm");
+    }, 500);
+  }
 
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      control?.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

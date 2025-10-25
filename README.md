@@ -1,7 +1,6 @@
 ## Brief Description
 
-This is an Angular application developed for Udacity MyStore. This project was generated
-with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.1.
+This is a modern Angular e-commerce application featuring a complete shopping experience with advanced filtering, wishlist functionality, and persistent storage. This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.1 and has been enhanced with additional features for improved user experience.
 
 ## Project Requirements and Best Practices
 
@@ -10,15 +9,31 @@ to your local machine, you only need to run `npm install` and `ng serve` to inst
 
 ### User Experience
 
-This application has been designed to emulate typical e-commerce applications. Major features includes:
+This application has been designed to emulate modern e-commerce applications with enhanced features:
 
-* The shopping cart page shows a total cost for all products in the cart.
-* The shopping cart page have the products to be purchased, quantities can be edited and the total price is reflecting with any change
-* Input forms are validated.
-* Feedback is provided to the user when actions such as adding products to the cart occur.
-* The individual product page displays the photo of the product, the name, the price, and the description.
-* Products can be removed from the cart.
-* An order confirmation page is displayed to the user after successful checkout.
+#### Core Features (Original)
+* Shopping cart page with total cost calculation
+* Editable product quantities with real-time price updates
+* Comprehensive input form validation
+* User feedback for cart actions
+* Detailed product pages with images, prices, and descriptions
+* Product removal from cart
+* Order confirmation page after checkout
+
+#### Enhanced Features (New)
+* **Advanced Product Filtering**: Search products by keyword across title, description, and category
+* **Category Filter**: Browse products by specific categories
+* **Multiple Sort Options**:
+  - Price (Low to High / High to Low)
+  - Name (A-Z / Z-A)
+  - Rating (Highest Rated)
+* **Wishlist/Favorites**: Save products for later with persistent storage
+* **Toast Notifications**: Modern, non-intrusive notifications replacing browser alerts
+* **Shopping Cart Persistence**: Cart items saved in localStorage and persist across sessions
+* **Loading States**: Visual feedback during data fetching with spinner animations
+* **Enhanced Error Handling**: Graceful error handling with retry logic and user-friendly messages
+* **Improved Form Validation**: Better validation feedback with clear error messages
+* **Responsive Design**: Optimized for all screen sizes using Tailwind CSS
 
 ### Styling
 
@@ -40,8 +55,16 @@ refer to it here for reference [fakestore API](https://fakestoreapi.com/docs)
 
 ## Data Flow
 
-A CartService and ProductService are being used to facilitate data sharing between the Product List component and the Shopping Cart component.
-using rxjs to act as a global state for the app.
+The application uses multiple services to manage state and facilitate data sharing:
+
+* **CartService**: Manages shopping cart state with localStorage persistence for data retention across sessions
+* **ProductService**: Handles product data sharing between components
+* **ProductFilterService**: Manages search, filter, and sort state for product listings
+* **WishlistService**: Manages favorite products with localStorage persistence
+* **NotificationService**: Centralized toast notification system for user feedback
+* **HttpService**: Enhanced HTTP client with error handling, retry logic, and loading states
+
+All services use RxJS BehaviorSubjects and Observables to create reactive data flows throughout the application.
 
 ### Routing
 
@@ -64,4 +87,18 @@ To start the project, perform the following steps:
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+## Key Enhancements Summary
+
+This enhanced version includes:
+
+1. **Better UX**: Toast notifications, loading spinners, and improved feedback
+2. **Advanced Filtering**: Search, category filter, and multiple sort options
+3. **Wishlist Feature**: Save favorite products for later
+4. **Data Persistence**: Cart and wishlist data persist across browser sessions
+5. **Error Handling**: Robust error handling with automatic retry and user-friendly messages
+6. **Form Validation**: Enhanced validation with clear error messaging
+7. **Modern Architecture**: Improved service architecture with reactive patterns
+
+All original functionalities have been strictly preserved while adding these enhancements.
 

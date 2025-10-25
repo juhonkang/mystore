@@ -5,6 +5,7 @@ import {RouterLink} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {CartService,Cart} from "../../services/cart.service";
 import {Product} from "../../services/products.service";
+import {NotificationService} from "../../services/notification.service";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -17,7 +18,11 @@ import {Subscription} from "rxjs";
 export class CartPageComponent {
   cart: Cart
   cartSubscription: Subscription | undefined;
-  constructor(private http: HttpService,private cartService: CartService) {
+  constructor(
+    private http: HttpService,
+    private cartService: CartService,
+    private notificationService: NotificationService
+  ) {
     this.cart = {}
   }
 
@@ -47,6 +52,6 @@ export class CartPageComponent {
 
   removeFromCart(product: Product): void {
       this.cartService.removeFromCart(product);
-      alert('Product removed from the cart!')
+      this.notificationService.info(`${product.title} removed from cart`);
   }
 }

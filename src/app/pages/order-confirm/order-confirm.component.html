@@ -3,13 +3,13 @@
   <div class="w-full text-center mb-8 ">
     <h1 class="text-base font-medium text-indigo-600">Thank you!</h1>
     <p class="mt-2 text-4xl font-bold tracking-tight">It's on the way!</p>
-    <p class="mt-2 text-base text-gray-500">Your order #{{ generateOrderNumber() }} has shipped and will be with you
+    <p class="mt-2 text-base text-gray-500">Your order #{{ orderNumber }} has shipped and will be with you
       soon.</p>
   </div>
 
   <div class="space-y-2 px-4 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 sm:px-0">
     <div class="flex sm:items-baseline sm:space-x-4">
-      <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Order #{{ generateOrderNumber() }}</h1>
+      <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Order #{{ orderNumber }}</h1>
 
     </div>
     <p class="text-sm text-gray-600">Order placed
@@ -97,5 +97,12 @@
       </dl>
     </div>
   </section>
+
+  <div class="mt-16 border-t border-gray-200 py-6 text-center">
+    <a routerLink="/" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+      Continue Shopping
+      <span aria-hidden="true"> &rarr;</span>
+    </a>
+  </div>
 </main>
 
