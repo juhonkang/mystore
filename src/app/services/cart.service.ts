@@ -95,20 +95,19 @@ export class CartService {
     console.log({existingProductIndex})
 
     if (existingProductIndex !== undefined && existingProductIndex > -1) {
-      // Product exists, update quantity
-      const updatedProducts = this._cart.value.products?.map((product, index) => {
+      // Product exists, update quantity by adding the new quantity to existing
+      const updatedProducts = this._cart.value.products?.map((existingProduct, index) => {
         if (index === existingProductIndex) {
-          return {...product, quantity: product.quantity + product.quantity};
+          return {...existingProduct, quantity: existingProduct.quantity + product.quantity};
         }
-        return product;
+        return existingProduct;
       });
 
-      const updatedCart =
-        {
-          ...this._cart.value.products,
-          products: updatedProducts,
-          total: this.calculateTotalPrice(updatedProducts as Product[]),
-        };
+      const updatedCart = {
+        ...this._cart.value,
+        products: updatedProducts,
+        total: this.calculateTotalPrice(updatedProducts as Product[]),
+      };
       this._cart.next(updatedCart);
       this.saveCartToStorage(updatedCart);
     } else {
@@ -116,7 +115,7 @@ export class CartService {
       const updatedProducts = this._cart.value.products ? [...this._cart.value.products, product] : [product];
       console.log({updatedProducts});
       const updatedCart = {
-        ...this._cart.value.products,
+        ...this._cart.value,
         products: updatedProducts,
         total: this.calculateTotalPrice(updatedProducts),
       };
